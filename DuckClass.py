@@ -1,7 +1,9 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QDesktopWidget
-from PyQt5.QtGui import QMovie, QKeyEvent
+from PyQt5.QtGui import QFont, QMovie, QKeyEvent
 from PyQt5.QtCore import Qt, QTimer
+
+from win32api import GetMonitorInfo, MonitorFromPoint
 
 class AnimatedDuckWindow(QMainWindow):
     def __init__(self):
@@ -11,10 +13,23 @@ class AnimatedDuckWindow(QMainWindow):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
 
+        self.setFixedWidth(1000)
+        self.setFixedHeight(1000)
+
         # Create a label to display the animation
         self.label = QLabel(self)
         self.label.mousePressEvent = self.duck_clicked
+        self.label.move(1000-460, 1000-320)
 
+        self.quackLabel = QLabel("QUACK!!", self)
+        font = QFont()
+        font.setCapitalization(True)
+        font.setPointSize(12)
+        self.quackLabel.setFont(font)
+        self.quackLabel.setStyleSheet("color: white")
+        self.quackLabel.setFixedSize(100, 500)
+        self.quackLabel.setHidden(True)
+        
         # Load animations
         self.idle_movie = QMovie("idle.gif")
         self.walk_movie = QMovie("walk.gif")
@@ -36,10 +51,13 @@ class AnimatedDuckWindow(QMainWindow):
 
     def position_window_at_bottom(self):
         """Position the window at the bottom of the screen."""
+        monitor_info = GetMonitorInfo(MonitorFromPoint((0,0)))
+        monitor_area = monitor_info.get("Monitor")
+        work_area = monitor_info.get("Work")
         screen_geometry = QDesktopWidget().screenGeometry()
-        window_height = 200  # Adjust as needed based on the size of the duck animation
-        x = (screen_geometry.width() - self.width()) // 2
-        y = screen_geometry.height() - window_height
+        window_height = 320  # Adjust as needed based on the size of the duck animation
+        x = screen_geometry.width() - self.width()
+        y = screen_geometry.height() - self.height() - (monitor_area[3]-work_area[3])
         self.setGeometry(x, y, self.width(), window_height)
 
     def set_animation(self, state):
@@ -74,10 +92,22 @@ class AnimatedDuckWindow(QMainWindow):
 
     def duck_clicked(self, event):
         """Handle mouse click event on the duck."""
-        print("quack")
+        self.quackLabel.move(self.label.x() - 50, self.label.y() - 200)
+        self.quackLabel.show()
+        QTimer.singleShot(1000, self.duck_unclick)
+        
+    def duck_unclick(self):
+        self.quackLabel.setHidden(True)
 
 # Run the application
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     mainWindow = AnimatedDuckWindow()
+    #hwnd = ctypes.windll.kernel32.GetConsoleWindow()  
+    #print(hwnd)
+    #if hwnd != 0:      
+        #ctypes.windll.user32.ShowWindow(hwnd, 0)      
+        #ctypes.windll.kernel32.CloseHandle(hwnd)
+        #_, pid = win32process.GetWindowThreadProcessId(hwnd)
+        #os.system('taskkill /PID ' + str(pid) + ' /f')
     sys.exit(app.exec_())
