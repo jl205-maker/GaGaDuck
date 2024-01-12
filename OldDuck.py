@@ -1,7 +1,10 @@
+from re import S
 import sys
 from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QDesktopWidget
 from PyQt5.QtGui import QFont, QMovie, QKeyEvent
 from PyQt5.QtCore import Qt, QTimer
+
+import Duck
 
 from win32api import GetMonitorInfo, MonitorFromPoint
 
@@ -103,11 +106,4 @@ class AnimatedDuckWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     mainWindow = AnimatedDuckWindow()
-    #hwnd = ctypes.windll.kernel32.GetConsoleWindow()  
-    #print(hwnd)
-    #if hwnd != 0:      
-        #ctypes.windll.user32.ShowWindow(hwnd, 0)      
-        #ctypes.windll.kernel32.CloseHandle(hwnd)
-        #_, pid = win32process.GetWindowThreadProcessId(hwnd)
-        #os.system('taskkill /PID ' + str(pid) + ' /f')
     sys.exit(app.exec_())
