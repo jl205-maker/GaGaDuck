@@ -40,7 +40,7 @@ class Duck(QLabel):
         self.brain = DuckBrain()
 
         # setup for basic duck movement
-        self.speed = 1
+        self.speed = 2 * self.m // 10
         self.dir = -1
         self.move_timer = QTimer(self)
         self.move_timer.timeout.connect(self.move_duck)
