@@ -34,7 +34,7 @@ class DuckBrain ():
         self.prev_actions.append(action)
 
     def get_next_action(self):
-        if self.prev_actions[-1] == "walk":
+        if self.prev_actions[-1] != "idle":
             self.make_action("idle")
             return "idle"
         elif self.prev_actions[-1] == "idle":

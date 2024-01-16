@@ -2,7 +2,7 @@ from re import S
 import sys
 from PyQt5.QtWidgets import QApplication, QLabel, QMainWindow, QDesktopWidget, QWidget
 from PyQt5.QtGui import QMovie, QKeyEvent
-from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtCore import Qt, QTimer, QUrl
 
 import Duck
 import Window

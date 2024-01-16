@@ -13,9 +13,15 @@ class WindowArea():
         self.screen_width = screen_geo.width()
         self.toolbar_height = monitor_area[3] - work_area[3]
         
+        self.sprite_multiplier = 5
+        #the base drawing is 64px, multiplier of 5 
+        
     def get_height(self):
         return self.screen_height
     def get_width(self):
         return self.screen_width
     def get_toolbar_height(self):
         return self.toolbar_height
+    def get_sprite_multiplier(self):
+        return self.sprite_multiplier
+    
